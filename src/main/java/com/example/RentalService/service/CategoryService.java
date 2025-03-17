@@ -18,7 +18,7 @@ public class CategoryService {
 	private CategoryRepo repo;
 	
 	@Autowired
-	private AuthService userService;
+	private UserService userService;
 	
 //	public Category addCategory(Category category) {
 //		System.out.println("in");

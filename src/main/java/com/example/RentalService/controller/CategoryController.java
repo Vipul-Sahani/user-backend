@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.RentalService.model.Category;
 import com.example.RentalService.model.Users;
 import com.example.RentalService.service.CategoryService;
-import com.example.RentalService.service.AuthService;
+import com.example.RentalService.service.UserService;
 
 @RestController
 @RequestMapping("/api/rental/")
 public class CategoryController {
 
     @Autowired
-    private CategoryService service;
+    private CategoryService categoryService;
     
     @Autowired
-    private AuthService userService;
+    private UserService userService;
 
     /**
      * Adds a new category for a specific user.
@@ -48,7 +48,7 @@ public class CategoryController {
         }
 
         category.setUser(user);
-        Category savedCategory = service.addCategory(category);
+        Category savedCategory = categoryService.addCategory(category);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
@@ -70,7 +70,7 @@ public class CategoryController {
      */
     @DeleteMapping("/category/{id}")
     public ResponseEntity<?> deleteCategoryById(@PathVariable int id) {
-        return service.deleteCategory(id);
+        return categoryService.deleteCategory(id);
     }
 
     /**
@@ -79,7 +79,7 @@ public class CategoryController {
      */
     @GetMapping("/getAllCategory")
     public ResponseEntity<List<Category>> getAllCategory() {
-        return new ResponseEntity<>(service.getAllcategory(), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.getAllcategory(), HttpStatus.OK);
     }
 
     /**
@@ -89,6 +89,6 @@ public class CategoryController {
      */
     @GetMapping("/category/{id}")
     public List<Category> getCategoryByUser(@PathVariable int id) {
-        return service.getCategoryByUserId(id);
+        return categoryService.getCategoryByUserId(id);
     }
 }

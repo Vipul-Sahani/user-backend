@@ -14,49 +14,52 @@ import com.example.RentalService.repo.UserRepositry;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
-    private EquipmentRepo equipmentRepo;
-	
+	private EquipmentRepo equipmentRepo;
+
 	@Autowired
 	private UserRepositry userRepo;
-	
-	public ResponseEntity<?> getAllEquipment() {
-        List<Equipment> equipmentList = equipmentRepo.findAll();
-        
-        if (equipmentList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No equipment found ");
-        }
 
-        return ResponseEntity.ok(equipmentList);
-    }
-	
-	
-	public ResponseEntity<?> getUserDetailsById(int id){
+	public ResponseEntity<?> getAllEquipment() {
+		List<Equipment> equipmentList = equipmentRepo.findAll();
+
+		if (equipmentList.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No equipment found ");
+		}
+
+		return ResponseEntity.ok(equipmentList);
+	}
+
+	public Users findUsreById(int id) {
+		return userRepo.findById(id).orElse(null);
+	}
+
+	public ResponseEntity<?> getUserDetailsById(int id) {
 		Users user = userRepo.findById(id).orElse(null);
-		
-		if(user != null) {
+
+		if (user != null) {
 			return ResponseEntity.ok(user);
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User Found");
 	}
-	
-	 public ResponseEntity<?> updateUserDetails(int id, Users updatedUser) {
-		 
-		 	Users user = userRepo.findById(id).get();
-		 	
-		 	if(user != null) {
-		 		
-		 		user.setEmail(updatedUser.getEmail());
-		 		user.setPhoneNumber(updatedUser.getPhoneNumber());
-		 		user.setUsername(updatedUser.getUsername());
-		 		
-		 		userRepo.save(user);
-		 		
-		 	return	ResponseEntity.ok(user);
-		 	}
-	        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User Found");
-	    }
+
+	public ResponseEntity<?> updateUserDetails(int id, Users updatedUser) {
+
+		Users user = userRepo.findById(id).get();
+
+		if (user != null) {
+
+			user.setEmail(updatedUser.getEmail());
+			user.setPhoneNumber(updatedUser.getPhoneNumber());
+			user.setUsername(updatedUser.getUsername());
+
+			userRepo.save(user);
+
+			return ResponseEntity.ok(user);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User Found");
+	}
 
 }
