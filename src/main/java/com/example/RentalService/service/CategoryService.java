@@ -20,18 +20,7 @@ public class CategoryService {
 	@Autowired
 	private UserService userService;
 	
-//	public Category addCategory(Category category) {
-//		System.out.println("in");
-////		Users user = userRepositry.findById(category.getUser().getId());
-//		System.out.println(category.toString());
-//
-//		Users user = userService.findUsreById(category.getUser().getId());
-//		System.out.println(user);
-//		if(user != null) {
-//			category.setUser(user);
-//		}
-//		return repo.save(category);
-//	}
+
 	
 	public Category addCategory(Category category) {
 

@@ -1,5 +1,5 @@
-package com.example.RentalService.model;
 
+package com.example.RentalService.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,11 +24,22 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    private Users user; // The user who made the booking
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "rental_id", nullable = false)
+    private Users rental; // The owner of the equipment (Rental)
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "equipment_id", nullable = false)
     private Equipment equipment;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
+    private Address address; // Address for delivery or pickup
+
+    @Column(nullable = false)
+    private int quantity; // Quantity of equipment rented
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -48,9 +59,13 @@ public class Booking {
     }
 
     // Parameterized constructor
-    public Booking(Users user, Equipment equipment, LocalDate startDate, LocalDate endDate, BigDecimal totalPrice, BookingStatus status) {
+    public Booking(Users user, Users rental, Equipment equipment, Address address, int quantity,
+                   LocalDate startDate, LocalDate endDate, BigDecimal totalPrice, BookingStatus status) {
         this.user = user;
+        this.rental = rental;
         this.equipment = equipment;
+        this.address = address;
+        this.quantity = quantity;
         this.startDate = startDate;
         this.endDate = endDate;
         this.totalPrice = totalPrice;
@@ -74,12 +89,36 @@ public class Booking {
         this.user = user;
     }
 
+    public Users getRental() {
+        return rental;
+    }
+
+    public void setRental(Users rental) {
+        this.rental = rental;
+    }
+
     public Equipment getEquipment() {
         return equipment;
     }
 
     public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public LocalDate getStartDate() {
@@ -116,6 +155,9 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking [bookingId=" + bookingId + ", user=" + user + ", equipment=" + equipment + ", startDate=" + startDate + ", endDate=" + endDate + ", totalPrice=" + totalPrice + ", status=" + status + "]";
+        return "Booking [bookingId=" + bookingId + ", user=" + user + ", rental=" + rental + ", equipment=" + equipment +
+                ", address=" + address + ", quantity=" + quantity + ", startDate=" + startDate + 
+                ", endDate=" + endDate + ", totalPrice=" + totalPrice + ", status=" + status + "]";
     }
 }
+

@@ -15,13 +15,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.RentalService.model.Equipment;
+import com.example.RentalService.model.Users;
 import com.example.RentalService.repo.EquipmentRepo;
+import com.example.RentalService.repo.UserRepositry;
 
 @Service
 public class EquipmentService {
 
     @Autowired
     private EquipmentRepo equipmentRepo;
+    
+    @Autowired
+    private UserRepositry repositry;
 
     private static final String IMAGE_DIRECTORY = "C:\\Users\\700054\\git\\RentalService\\RentalService\\src\\Image\\";
 
@@ -33,6 +38,12 @@ public class EquipmentService {
      * @throws IOException If an error occurs while storing the image.
      */
     public Equipment addEquipment(Equipment equipment, MultipartFile imageFile) throws IOException {
+    	
+    	int rental_id = equipment.getUser().getId();
+    	
+    	Users rental = repositry.findById(rental_id).get();
+    	
+    	equipment.setUser(rental);
         if (imageFile != null && !imageFile.isEmpty()) {
             String fileName = storeImage(imageFile);
             equipment.setImageUrl(fileName);

@@ -10,6 +10,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
 
+    
     /**
      * Adds new equipment along with an image file.
      * @param equipmentJson JSON string containing equipment details.
@@ -63,16 +65,20 @@ public class EquipmentController {
         return equipmentService.getEquipmentByUserId(id);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_user', 'ROLE_rental')")
     @GetMapping("/getAllEquipment")
-    public ResponseEntity<?> getAllEquipment(){
-    	return equipmentService.getAllEquipment();
+    public ResponseEntity<?> getAllEquipment() {
+        return equipmentService.getAllEquipment();
     }
+
     /**
      * Retrieves an image file by its filename.
      * @param filename Name of the image file.
      * @return Response entity containing the image resource or a not found response.
      * @throws MalformedURLException If the file path is incorrect.
      */
+    
+    @PreAuthorize("hasAnyRole('ROLE_user', 'ROLE_rental')")
     @GetMapping("/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) throws MalformedURLException {
         Path imagePath = Paths.get("C:/Users/700054/git/RentalService/RentalService/src/Image/" + filename);
@@ -96,4 +102,6 @@ public class EquipmentController {
     public ResponseEntity<?> deleteById(@PathVariable int id) {
         return equipmentService.deleteEquipmentById(id);
     }
+ 
+
 }
